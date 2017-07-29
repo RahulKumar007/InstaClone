@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +38,13 @@
             </div>
                 <input type="submit" value="Sign Up">
         </form>
-
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+{% endif %}
 
     </div><br><br>
 

@@ -44,12 +44,21 @@ class PostModel(models.Model):
 
     caption = models.CharField(max_length=255)
 
+    category = models.CharField(max_length=255)
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     updated_on = models.DateTimeField(auto_now=True)
 
+    has_liked = False
+
+    @property
     def like_count(self):
         return len(LikeModel.objects.filter(post=self))
+
+    @property
+    def comments(self):
+        return CommentModel.objects.filter(post=self).order_by('created_on')
 
 
 class LikeModel(models.Model):
@@ -57,6 +66,34 @@ class LikeModel(models.Model):
     user = models.ForeignKey(UserModel)
 
     post = models.ForeignKey(PostModel)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    updated_on = models.DateTimeField(auto_now=True)
+
+class CommentModel(models.Model):
+
+    user = models.ForeignKey(UserModel)
+
+    post = models.ForeignKey(PostModel)
+
+    comment_text = models.CharField(max_length=555)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    updated_on = models.DateTimeField(auto_now=True)
+
+    has_upvoted = False
+
+    @property
+    def upvote_count(self):
+        return len(UpvoteModel.objects.filter(comment=self))
+
+class UpvoteModel(models.Model):
+
+    user = models.ForeignKey(UserModel)
+
+    comment = models.ForeignKey(CommentModel)
 
     created_on = models.DateTimeField(auto_now_add=True)
 
